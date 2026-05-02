@@ -2,58 +2,254 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Meow-Chow Clicker</title>
+  <title>Baldi's Basics – Hallway Escape</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #f5f5f5;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: radial-gradient(circle at top, #251133 0, #050308 60%);
+      color: #fdf5ff;
       text-align: center;
-    }
-    h1 {
-      color: #ffcc00;
-      margin-top: 40px;
-    }
-    p {
-      font-size: 18px;
-    }
-    #count {
-      font-weight: bold;
-      color: #4ec8ff;
-    }
-    button {
-      font-size: 20px;
-      padding: 10px 20px;
-      margin-top: 20px;
-      border-radius: 8px;
-      border: none;
-      background-color: #4ec8ff;
-      color: #111;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #2ba0d1;
+
+    h1 {
+      color: #ffb3e6;
+      text-shadow: 0 0 10px rgba(255, 179, 230, 0.8);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
     }
+
+    h2 {
+      margin-top: 4px;
+      font-size: 18px;
+      color: #ffe6ff;
+    }
+
+    #scene-text {
+      max-width: 420px;
+      margin: 14px auto;
+      line-height: 1.4;
+    }
+
+    .choice-buttons {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: none;
+      background-color: #ffd6ff;
+      color: #221022;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 214, 255, 0.6);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+      min-width: 220px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      background-color: #ffc0fa;
+      box-shadow: 0 0 16px rgba(255, 214, 255, 0.9);
+    }
+
+    #status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ff9090;
+    }
+
     a {
-      color: #ccc;
+      color: #ffd6ff;
       display: inline-block;
-      margin-top: 20px;
+      margin-top: 18px;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>Meow-Chow Clicker</h1>
-  <p>Clicks: <span id="count">0</span></p>
-  <button onclick="increment()">Click me!</button>
+  <h1>Baldi's Basics</h1>
+  <h2>Hallway Escape</h2>
+
+  <p id="scene-text"></p>
+
+  <div class="choice-buttons" id="choices"></div>
+
+  <p id="status"></p>
 
   <p><a href="index.html">← Back to Home</a></p>
 
   <script>
-    let count = 0;
-    function increment() {
-      count++;
-      document.getElementById('count').textContent = count;
+    // Very simple Baldi-style hallway choice game
+
+    const scenes = {
+      start: {
+        text: "You are in Baldi's school hallway. You hear the ruler slapping somewhere behind you. Which way do you go?",
+        choices: [
+          { text: "Run left", next: "leftHall" },
+          { text: "Run right", next: "rightHall" },
+          { text: "Go straight", next: "straightHall" }
+        ]
+      },
+      leftHall: {
+        text: "You turn left and see the Principal. \"No running in the halls!\" You get detention... and Baldi catches you.",
+        end: true,
+        status: "Baldi got you! Try a different path.",
+        restart: true
+      },
+      rightHall: {
+        text: "You turn right and see Baldi at the other end of the hallway, heading toward you, slapping his ruler.",
+        choices: [
+          { text: "Hide in the classroom", next: "classroom" },
+          { text: "Run past Baldi", next: "runPastBaldi" }
+        ]
+      },
+      straightHall: {
+        text: "You go straight and find a notebook on the floor. You hear Baldi getting closer.",
+        choices: [
+          { text: "Grab the notebook and keep going", next: "notebook" },
+          { text: "Ignore it and just run", next: "ignoreNotebook" }
+        ]
+      },
+      classroom: {
+        text: "You slip into a classroom and shut the door. There's a notebook on the desk and a window leading outside.",
+        choices: [
+          { text: "Solve the notebook problems", next: "notebookClass" },
+          { text: "Climb out the window", next: "windowEscape" }
+        ]
+      },
+      runPastBaldi: {
+        text: "You try to sprint past Baldi. He turns, sees you, and speeds up. That's not good...",
+        end: true,
+        status: "You didn't make it past Baldi. Game over.",
+        restart: true
+      },
+      notebook: {
+        text: "You grab the notebook. It says: 3 + 4 = ? If you get it wrong, Baldi will be even faster...",
+        quiz: true,
+        answer: "7",
+        correctNext: "quizSafe",
+        wrongNext: "quizFail"
+      },
+      ignoreNotebook: {
+        text: "You run past the notebook. Too bad, it might have helped. Baldi turns the corner and sees you.",
+        end: true,
+        status: "Baldi catches you at the end of the hallway.",
+        restart: true
+      },
+      notebookClass: {
+        text: "The notebook on the desk says: 5 - 2 = ? Answer fast before Baldi finds you.",
+        quiz: true,
+        answer: "3",
+        correctNext: "classSafe",
+        wrongNext: "quizFailClass"
+      },
+      windowEscape: {
+        text: "You carefully climb out the window into the schoolyard. Baldi can't follow you out here... for now.",
+        end: true,
+        status: "You escaped this time!", 
+        restart: true
+      },
+      quizSafe: {
+        text: "You answered 3 + 4 correctly! Baldi slows down, confused. You find an exit door at the end of the hallway.",
+        end: true,
+        status: "You escaped the school! Nice job.",
+        restart: true
+      },
+      quizFail: {
+        text: "You answered wrong. Baldi gets ANGRY. You can hear the ruler slapping faster and faster...",
+        end: true,
+        status: "Baldi catches you before you reach the door.",
+        restart: true
+      },
+      classSafe: {
+        text: "You solved the problem in the classroom. Baldi passes by without noticing you. Once it's quiet, you sneak out a back door.",
+        end: true,
+        status: "You escaped quietly. Baldi never saw you.",
+        restart: true
+      },
+      quizFailClass: {
+        text: "Wrong answer. The notebook scribbles turn weird. Baldi opens the classroom door with a loud creak...",
+        end: true,
+        status: "Baldi found you in the classroom.",
+        restart: true
+      }
+    };
+
+    const sceneText = document.getElementById("scene-text");
+    const choicesDiv = document.getElementById("choices");
+    const statusText = document.getElementById("status");
+
+    function showScene(name) {
+      const scene = scenes[name];
+      sceneText.textContent = scene.text;
+      choicesDiv.innerHTML = "";
+      statusText.textContent = "";
+
+      if (scene.quiz) {
+        // Simple text input quiz
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Type your answer";
+        input.style.padding = "6px 10px";
+        input.style.borderRadius = "8px";
+        input.style.border = "none";
+        input.style.marginTop = "6px";
+
+        const submitBtn = document.createElement("button");
+        submitBtn.textContent = "Submit";
+        submitBtn.onclick = () => {
+          const value = input.value.trim();
+          if (value === scene.answer) {
+            showScene(scene.correctNext);
+          } else {
+            showScene(scene.wrongNext);
+          }
+        };
+
+        choicesDiv.appendChild(input);
+        choicesDiv.appendChild(submitBtn);
+        return;
+      }
+
+      if (scene.end) {
+        statusText.textContent = scene.status || "Game over.";
+
+        if (scene.restart) {
+          const restartBtn = document.createElement("button");
+          restartBtn.textContent = "Play Again";
+          restartBtn.onclick = () => showScene("start");
+          choicesDiv.appendChild(restartBtn);
+        }
+        return;
+      }
+
+      // Normal choices
+      scene.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.text;
+        btn.onclick = () => showScene(choice.next);
+        choicesDiv.appendChild(btn);
+      });
     }
+
+    // Start the game
+    showScene("start");
   </script>
 </body>
 </html>
