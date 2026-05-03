@@ -4,67 +4,79 @@
   <meta charset="UTF-8" />
   <title>Meow-Chow Gaming</title>
   <style>
-  body {
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    background: radial-gradient(circle at top, #222 0, #050308 55%);
-    color: #fdf5ff;
-    text-align: center;
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
+ <style>
+    body {
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: radial-gradient(circle at top, #2b163d 0, #050308 60%);
+      color: #fdf5ff;
+      text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
-  h1 {
-    color: #ffcc66;
-    text-shadow: 0 0 10px rgba(255, 204, 102, 0.8);
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-  }
+    h1 {
+      color: #ffcc66;
+      text-shadow: 0 0 10px rgba(255, 204, 102, 0.9);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
 
-  p {
-    margin: 6px 0 14px;
-  }
+    p {
+      margin: 6px 0 14px;
+    }
 
-  .game-list {
-    margin-top: 10px;
-  }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      vertical-align: middle;
+      margin-right: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 214, 255, 0.8);
+    }
 
-  .game-list a {
-    display: inline-block;
-    margin: 8px 10px;
-    padding: 8px 16px;
-    color: #222;
-    background: #ffd6ff;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 0 8px rgba(255, 214, 255, 0.5);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
-  }
+    .game-list {
+      margin-top: 12px;
+    }
 
-  .game-list a:hover {
-    transform: translateY(-2px);
-    background: #ffc0fa;
-    box-shadow: 0 0 14px rgba(255, 214, 255, 0.9);.
-    logo-icon {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle;
-    margin-right: 8px;
-    border-radius: 50%;
-  }
+    .game-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 8px 10px;
+      padding: 8px 18px;
+      color: #221022;
+      background: #ffd6ff;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(255, 214, 255, 0.6);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+    }
+
+    .game-list a:hover {
+      transform: translateY(-2px);
+      background: #ffc0fa;
+      box-shadow: 0 0 16px rgba(255, 214, 255, 0.9);
+    }
+
+    .button-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+    }
+  </style>
   </style>
 </head>
 <body>
   <h1> 
-    <img src="paw.png" alt="paw" class="logo-icon">
+    <img src="cat.jpeg" alt="paw" class="logo-icon">
     Meow-Chow Gaming</h1>
   <p>Welcome! Play some games below! Email me if you want more games at link.wolf.awoo@gmail.com (more coming soon).</p>
-
   <div class="game-list">
     <a href="game1.html">Play Game 1</a>
   </div>
